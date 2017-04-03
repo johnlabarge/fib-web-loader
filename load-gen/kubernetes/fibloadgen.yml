@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: fibloadgen
+spec:
+  replicas: 36 
+  template:
+    metadata:
+      labels:
+        component: "fibloadgen"
+    spec:
+      containers:
+        - name: fiboadgen
+          image: johnlabarge/fibloadgen
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 200m
+              memory: 200Mi
+          env:
+          - name: URL
+            value: "http://fibloader"
+          - name: NUM
+            value: "47"
+          - name: SLEEPTIME
+            value: "1" 
+          - name: THREADS 
+            value: "15"
+

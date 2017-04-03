@@ -1,0 +1,6 @@
+#!/bin/sh
+export URL=http://$(kubectl get services | grep fibloader | awk '{print $3}')
+export NUM=30
+export SLEEPTIME=1
+export THREADS=100
+go run loadgen.go >>loadgen.out &
