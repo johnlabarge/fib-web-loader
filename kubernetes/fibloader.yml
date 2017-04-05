@@ -37,6 +37,11 @@ spec:
               memory: 300Mi
           ports:
            - containerPort: 8080
+          env:
+            - name: HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -51,3 +56,4 @@ spec:
   minReplicas: 2
   maxReplicas: 100
   targetCPUUtilizationPercentage: 50
+
