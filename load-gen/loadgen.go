@@ -31,6 +31,8 @@ func doRequest(url string, sleeptime int) {
 			if err != nil {
 				fmt.Println(err)
 			} else {
+				t := time.Now()
+				fmt.Print(t.Format("15:04:05.99999999"))
 				fmt.Println(string(responseData))
 			}
 		}

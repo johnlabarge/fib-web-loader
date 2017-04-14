@@ -5,26 +5,35 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
+
 func fib(n int) int {
+//	fmt.Println("Calculating fib " +  strconv.Itoa(n))
 	if n > 1 {
 		return fib(n-1) + fib(n-2)
 	}
 	return 1
 }
-func recordRequest() {
+func recordRequest(requestInfo string) {
 	host := os.Getenv("HOST")
-	fmt.Println("host:" + host)
+	fmt.Println("host:" + host + ":" + requestInfo)
 }
 func handler(w http.ResponseWriter, r *http.Request) {
-	recordRequest()
+	jobId := time.Now().UnixNano()
+	recordRequest(r.URL.Path)
 	nS := r.URL.Path[1:]
 	var n, err = strconv.Atoi(nS)
 	if err != nil {
 		n = 0
 	}
-	fmt.Fprintf(w, "<h1> fib(%d) = %d </h1>", n, fib(n))
+	go func() {
+		result := fib(n)
+		fmt.Printf("RESULT for job %d is %d", jobId, result)
+	}()
+	fmt.Fprintf(w, "{\n\tjob:%d,", jobId)
+	fmt.Fprintf(w, "\n\tnumber:%d,\n\tfibonucci:?\n}", n)
 }
 
 func main() {
