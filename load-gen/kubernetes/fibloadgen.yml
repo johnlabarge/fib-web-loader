@@ -23,7 +23,7 @@ spec:
           - name: URL
             value: "http://fibloader"
           - name: NUM
-            value: "47"
+            value: "37"
           - name: SLEEPTIME
             value: "1" 
           - name: THREADS 
