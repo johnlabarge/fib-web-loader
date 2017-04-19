@@ -21,8 +21,13 @@ func convertToInt(s string, def int) int {
 }
 
 func doRequest(url string, sleeptime int) {
+	timeout := time.Duration(5 * time.Minute)
+	client := http.Client{
+		Timeout: timeout,
+	}
 	for true {
-		resp, err := http.Get(url)
+
+		resp, err := client.Get(url)
 		if err != nil {
 			fmt.Println(err)
 		} else {
