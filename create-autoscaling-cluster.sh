@@ -1,8 +1,9 @@
 #!/bin/sh
 
 #ASSUMES DEFAULT CREDENTIALS AVAILABLE
-gcloud container clusters create cluster-under-test --zone us-central1-f --additional-zones=us-central1-a,us-central1-b --enable-autoscaling --min-nodes=1 --max-nodes=36 --log-http
-
+gcloud container clusters create cluster-under-test \
+--zone us-central1-f --additional-zones=us-central1-a,us-central1-b \
+--enable-autoscaling --min-nodes=1 --max-nodes=36 --log-http --cluster-version=1.6.6 --no-enable-cloud-logging
 
 # outputs: TODO use deployment manager to create 
 # {"cluster": 
