@@ -7,7 +7,6 @@ metadata:
     kubernetes.io/cluster-service: "true"
     version: v2.0
   name: fluentd-gcp-v2.0
-  namespace: kube-system
 spec:
   selector:
     matchLabels:
@@ -32,6 +31,8 @@ spec:
         env:
         - name: FLUENTD_ARGS
           value: --no-supervisor
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/logging-creds/logging-service-account.json
         image: gcr.io/google-containers/fluentd-gcp:2.0.5
         imagePullPolicy: IfNotPresent
         livenessProbe:
@@ -65,6 +66,8 @@ spec:
         volumeMounts:
         - mountPath: /var/log
           name: varlog
+        - mountPath: "/etc/logging-creds"
+          name: "logging-service-account"
         - mountPath: /var/lib/docker/containers
           name: varlibdockercontainers
           readOnly: true
@@ -73,6 +76,7 @@ spec:
           readOnly: true
         - mountPath: /etc/fluent/config.d
           name: config-volume
+
       - command:
         - /monitor
         - --component=fluentd
@@ -100,6 +104,9 @@ spec:
       - effect: NoExecute
         operator: Exists
       volumes:
+      - name: logging-service-account
+        secret: 
+          secretName: logging-service-account
       - hostPath:
           path: /var/log
         name: varlog
@@ -111,7 +118,7 @@ spec:
         name: libsystemddir
       - configMap:
           defaultMode: 420
-          name: fluentd-gcp-config-v1.0
+          name: fluentd-gcp-config
         name: config-volume
       - hostPath:
           path: /etc/ssl/certs
